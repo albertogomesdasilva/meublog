@@ -20,6 +20,13 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')->name('admin.')-
         Route::put('/update/{id}','ArtigoController@update')->name('update');
         Route::delete('/delete/{id}','ArtigoController@destroy')->name('delete');
     });  
+    Route::prefix('tema')->name('tema.')->group(function(){
+        Route::get('/index','TemaController@index')->name('index');
+        Route::post('/store','TemaController@store');
+        Route::get('/edit/{id}','TemaController@edit');
+        Route::put('/update/{id}','TemaController@update');
+        Route::delete('/delete/{id}','TemaController@destroy');
+      }); 
     
 });
 

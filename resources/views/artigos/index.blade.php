@@ -127,9 +127,17 @@
                                 <td>{{$artigo->id}}</td>                                
                                 <td>{{$artigo->titulo}}</td>
                                 <td>{{$artigo->user->name}}</td>
-                                <td>{{$artigo->created_at}}</td>
-                                <td>{{$artigo->updated_at}}</td>
-                                <td>                                    
+                                @if(is_null($artigo->created_at))
+                                <td></td>
+                                @else
+                                <td>{{date('d/m/Y H:i:s', strtotime($artigo->created_at))}}</td>
+                                @endif
+                                @if(is_null($artigo->updated_at))
+                                <td></td>
+                                @else
+                                <td>{{date('d/m/Y H:i:s', strtotime($artigo->updated_at))}}</td>
+                                @endif
+                                <td>                                                                      
                                         <div class="btn-group">                                           
                                             <button type="button" data-id="{{$artigo->id}}" class="edit_artigo_btn fas fa-edit" style="background:transparent;border:none;"></button>
                                             <button type="button" data-id="{{$artigo->id}}" data-tituloartigo="{{$artigo->titulo}}" class="delete_artigo_btn fas fa-trash" style="background:transparent;border:none;"></button>                                  
@@ -221,12 +229,181 @@ $('#EditArtigoModal').on('shown.bs.modal',function(){
             url:'edit/'+id,
             success: function(response){
                 if(response.status==200){
-                console.log(response.artigo); ///O que tem neste objeto, vamos inspecionar? 
+                    $('#edit_artigo_id').val(response.artigo.id);
+                    $('.titulo').val(response.artigo.titulo);
+                    $('.descricao').val(response.artigo.descricao);
+                    $('.conteudo').val(response.artigo.conteudo);
+                    $('.slug').val(response.artigo.slug);   
                 }
             }
         });
     });
     //Fim chamada EditArtigoModal
+//Inicio processo update
+$(document).on('click','.update_artigo',function(e){
+e.preventDefault();
+
+            $(this).text("Atualizando...");
+            var id = $('#edit_artigo_id').val();
+
+            var data = {
+                'titulo': $('#edit_titulo').val(),
+                'descricao': $('#edit_descricao').val(),
+                'conteudo': $('#edit_conteudo').val(),
+                'slug': $('#edit_slug').val(),                
+            }
+
+            $.ajaxSetup({
+                headers:{
+                    'X-CSRF-TOKEN':$('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type:'POST',                
+                dataType:'json',
+                method: 'PUT',
+                url: 'update/'+id,
+                data: data,
+                success:function(response){                    
+                    if(response.status==400){                        
+                        //erros na validação
+                        $('#updateform_errList').html("");
+                        $('#updateform_errList').addClass('alert alert-danger');
+                        $.each(response.errors,function(key,err_values){
+                            $('#updateform_errList').append('<li>'+err_values+'</li>');
+                        });
+                        $(this).text("Atualizado");
+                    }else if(response.status==404){                         
+                        //não localizado
+                        $('#updateform_errList').html("");
+                        $('#success_message').addClass('alert alert-warning');
+                        $('#success_message').text(response.message);
+                        $(this).text("Atualizado");
+                    }else{
+                       //sucesso na operação
+                        $('#updateform_errList').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $(this).text("Atualizado");                  
+
+                        $('#editform').trigger('reset');
+                        $('#EditArtigoModal').modal('hide');                                          
+                                
+                        //atualizando a <tr> identificada na tabela html
+                        var datacriacao = new Date(response.artigo.created_at);
+                            datacriacao = datacriacao.toLocaleString('pt-BR');
+                        if(datacriacao=="31/12/1969 21:00:00"){
+                            datacriacao = "";
+                        }
+                        var dataatualizacao = new Date(response.artigo.updated_at);
+                            dataatualizacao = dataatualizacao.toLocaleString('pt-BR');
+                        if(dataatualizacao=="31/12/1969 21:00:00"){
+                            dataatualizacao="";
+                        }
+
+                        var linha = '<tr id="art'+response.artigo.id+'">\
+                                    <td>'+response.artigo.id+'</td>\
+                                    <td>'+response.artigo.titulo+'</td>\
+                                    <td>'+response.user.name+'</td>\
+                                    <td>'+datacriacao+'</td>\
+                                    <td>'+dataatualizacao+'</td>\
+                                    <td><div class="btn-group">\
+                                    <button type="button" data-id="'+response.artigo.id+'"\
+                                    class="edit_artigo_btn fas fa-edit"\
+                                    style="background:transparent;border:none;"></button>\
+                                    <button type="button" data-id="'+response.artigo.id+'"\
+                                    data-tituloartigo="'+response.artigo.titulo+'" \
+                                    class="delete_artigo_btn fas fa-trash"\
+                                    style="background:transparent;border:none;"></button>\
+                                    </div></td>\
+                                    </tr>';                             
+                                $("#art"+id).replaceWith(linha);                    
+                    }
+                }
+            });
+        
+        });    
+        //Fim processo update
+        //chamar o AddArtigoModal
+        $('#AddArtigoModal').on('shown.bs.modal',function(){
+                $('.titulo').focus();
+        });
+
+        $(document).on('click','.AddArtigoModal_btn',function(e){
+                    e.preventDefault();
+                    $('#addform').trigger('reset');
+                    $('#AddArtigoModal').modal('show');
+        });       
+        //Fim da chamada ao AddArtigoModal
+        //Inicio da criação do artigo
+        $(document).on('click','.add_artigo',function(e){
+            e.preventDefault();
+            var data = {
+                'titulo': $('.titulo').val(),
+                'descricao': $('.descricao').val(),
+                'conteudo': $('.conteudo').val(),
+                'slug': $('.slug').val(),
+            }
+            $.ajaxSetup({                
+                headers:{
+                'X-CSRF-TOKEN':$('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url:'store',
+                type:'POST',
+                dataType: 'json',
+                data:data,
+                success:function(response){
+                if(response.status==400){
+                           //erros
+                            $('#saveform_errList').html("");
+                            $('#saveform_errList').addClass("alert alert-danger");
+                            $.each(response.errors,function(key,err_values){
+                                    $('#saveform_errList').append('<li>'+err_values+'</li>');
+                            });
+          
+                }else{
+                //Sucesso na operação
+                $('#saveform_errList').html("");
+                $('#success_message').addClass("alert alert-success");
+                $('#success_message').text(response.message);
+                $('#addform').trigger('reset');
+                $('#AddArtigoModal').modal('hide');
+                //inclui uma linha nova na tabela html
+        var datacriacao = new Date(response.artigo.created_at);
+            datacriacao = datacriacao.toLocaleString('pt-BR');
+                if(datacriacao=="31/12/1969 21:00:00"){
+                datacriacao = "";
+                }                       
+        var dataatualizacao =  new Date(response.artigo.updated_at);
+            dataatualizacao = dataatualizacao.toLocaleString('pt-BR');
+                if(dataatualizacao=="31/12/1969 21:00:00"){
+                dataatualizacao = "";
+                }  
+
+                var linha = '<tr id="post'+response.artigo.id+'">\
+                        <td>'+response.artigo.id+'</td>\
+                        <td>'+response.artigo.titulo+'</td>\
+                        <td>'+response.user.name+'</td>\
+                        <td>'+datacriacao+'</td>\
+                        <td>'+dataatualizacao+'</td>\
+                        <td><div class="btn-group">\
+                        <button type="button" \
+                        data-id="'+response.artigo.id+'" class="edit_artigo_btn fas fa-edit" \
+                        style="background:transparent;border:none;"></button>\
+                        <button type="button" data-id="'+response.artigo.id+'" \
+                        data-tituloartigo="'+response.artigo.titulo+'" \
+                        class="delete_artigo_btn fas fa-trash" \
+                        style="background:transparent;border:none;"></button>\
+                        </div></td>\
+                        </tr>';  
+            $('#lista_artigo').append(linha);
+                    }
+                }
+            });
+});
+//Fim da criação do artigo
 
 });  //FIM ready
 

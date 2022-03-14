@@ -5,22 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comentario extends Model
+class Arquivo extends Model
 {
     use HasFactory;
-    protected $table = 'comentarios';
+    protected $table = 'arquivos';
     protected $fillable = [
         'artigos_id',
         'user_id',
-        'texto',
+        'rotulo',
+        'nome',
+        'path',
     ];
-
     public function user(){
         return $this->belongsTo(User::class);
     }
-
     public function artigo(){
         return $this->belongsTo(Artigo::class);
     }
-    
+
 }

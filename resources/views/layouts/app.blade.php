@@ -10,10 +10,10 @@
     
     <title>Painel Administrativo</title>
     
-<link rel="stylesheet" href="{{asset('/bootstrap-4.1.3-dist/css/bootstrap.css')}}">
-<link rel="stylesheet" href="{{asset('/bootstrap-4.1.3-dist/css/bootstrap.min.css')}}">
+<link rel="stylesheet" href="{{asset('bootstrap-4.1.3-dist/css/bootstrap.css')}}">
+<link rel="stylesheet" href="{{asset('bootstrap-4.1.3-dist/css/bootstrap.min.css')}}">
 
-<link rel="stylesheet" href="{{asset('/fontawesome/css/all.css')}}">    
+<link rel="stylesheet" href="{{asset('fontawesome/css/all.css')}}">    
 
 </head>
 <body class="container mt-5" id="app">
@@ -29,6 +29,10 @@
         <li class="nav-item active">
         <a class="nav-link" href="{{route('admin.artigos.index')}}">Artigos</a>
         </li>
+        <li class="nav-item active">
+        <a class="nav-link" href="{{route('admin.tema.index')}}">Temas</a>
+        </li>
+        
         </ul>
 
        </div>
@@ -41,10 +45,10 @@
       </main>             
      </div>
     <!--jquery-->
-    <script src="{{asset('/jquery/jquery-3.6.0.js')}}" type="text/javascript"></script>                     
+    <script src="{{asset('jquery/jquery-3.6.0.js')}}" type="text/javascript"></script>                     
      <!--bootstrap-->
-     <script src="{{asset('/bootstrap-4.1.3-dist/js/bootstrap.js')}}" type="text/javascript"></script>  
-     <script src="{{asset('/bootstrap-4.1.3-dist/js/bootstrap.min.js')}}" type="text/javascript"></script>      
+     <script src="{{asset('bootstrap-4.1.3-dist/js/bootstrap.js')}}" type="text/javascript"></script>  
+     <script src="{{asset('bootstrap-4.1.3-dist/js/bootstrap.min.js')}}" type="text/javascript"></script>      
       @yield('scripts')    
 
 </body>

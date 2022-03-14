@@ -96,7 +96,7 @@ class ArtigoController extends Controller
 
     
     public function update(Request $request, $id)
-    {
+    {        
         $validator = Validator::make($request->all(),[
             'titulo'    => 'required|max:100',
             'descricao' => 'required|max:180',
@@ -124,7 +124,7 @@ class ArtigoController extends Controller
                 $artigo->slug = $request->input('slug');
                 $artigo->user_id = $user->id;
                 $artigo->update();
-                $a = Artigo::find($id);
+                $a = Artigo::find($id);                
                 return response()->json([
                     'artigo'  => $a,
                     'user'    => $user,
