@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Artigo;
+use App\Models\Tema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
@@ -23,12 +24,11 @@ class ArtigoController extends Controller
             $artigos = $this->artigo->orderBy('id','DESC')->paginate(5);                           
         }else{
             $query = Artigo::with('User')
-                         ->where('titulo','LIKE','%'.$request->pesquisa.'%');
-         
+                         ->where('titulo','LIKE','%'.$request->pesquisa.'%');         
             $artigos = $query->orderBy('id','DESC')->paginate(5);
-        }            return view('artigos.index',compact('artigos'));
-
-
+        }            
+            $temas = Tema::all('id','titulo'); //Todos os temas
+        return view('artigos.index',compact('artigos','temas'));
     }
 
     
@@ -59,17 +59,24 @@ class ArtigoController extends Controller
             ]);
         }else{
             $user = User::find(1);
+            $timestamps = $this->artigo->timestamps;
+            $this->artigo->timestamps=false;
             $data = [
                 'titulo'     => $request->input('titulo'),
                 'descricao'  => $request->input('descricao'),
                 'conteudo'   => $request->input('conteudo'),
                 'slug'       => $request->input('slug'),
                 'user_id'    => $user->id,
+                'created_at' =>now(),
+                'updated_at' => null,
             ];
-            $artigo = $this->artigo->create($data);
-            return response()->json([
-                'artigo' => $artigo,
+            $artigo = $this->artigo->create($data);      //criação do artigo                                          
+            $this->artigo->timestamps=true;                        
+            $artigo->temas()->sync($request->input('temas'));  //sincronização
+            $a = Artigo::find($artigo->id);            
+            return response()->json([                
                 'user'  => $user,
+                'artigo' => $a,
                 'status'  => 200,
                 'message' => 'Artigo adicionado com sucesso!',
             ]);            

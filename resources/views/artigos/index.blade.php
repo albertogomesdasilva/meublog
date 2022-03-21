@@ -31,7 +31,17 @@
                 <div class="form-group mb-3">
                     <label for="">Slug</label>
                     <input type="text" class="slug form-control">
-                </div>            
+                </div> 
+                <div class="form-group mb-3">
+                <label for="">Temas</label>
+                <div class="form-group mb-3">
+                        @foreach($temas as $t)                        
+                        <label>
+                                <input type="checkbox" name="temas[]" value="{{$t->id}}">{{$t->titulo}}                            
+                        </label>                        
+                        @endforeach
+                </div>
+            </div>           
             </form>
             </div>
             <div class="modal-footer">
@@ -338,11 +348,19 @@ e.preventDefault();
         //Inicio da criação do artigo
         $(document).on('click','.add_artigo',function(e){
             e.preventDefault();
+            //Array apenas com os checkboxs marcados
+
+            var temas = new Array;
+            $("input[name='temas[]']:checked").each(function(){                
+                temas.push($(this).val());
+            });              
+
             var data = {
                 'titulo': $('.titulo').val(),
                 'descricao': $('.descricao').val(),
                 'conteudo': $('.conteudo').val(),
                 'slug': $('.slug').val(),
+                'temas':temas,   //Array
             }
             $.ajaxSetup({                
                 headers:{
