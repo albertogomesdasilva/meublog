@@ -54,7 +54,6 @@
 <!--End AddArtigoModal-->
 
 <!--EditArtigoModal-->
-
 <div class="modal fade" id="EditArtigoModal" tabindex="-1" role="dialog" aria-labelledby="titleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -67,7 +66,6 @@
             <div class="modal-body form-horizontal">
             <form id="editform" name="editform" class="form-horizontal" role="form">
                 <ul id="updateform_errList"></ul>
-
                 <input type="hidden" id="edit_artigo_id">
                 <div class="form-group mb-3">
                     <label for="">Título</label>
@@ -84,6 +82,16 @@
                 <div class="form-group mb-3">
                     <label for="">Slug</label>
                     <input type="text" id="edit_slug" class="slug form-control">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="">Temas</label>
+                    <div class="form-group mb-3">
+                        @foreach($temas as $t)                        
+                        <label>
+                            <input type="checkbox" id="check{{$t->id}}" name="temas[]" value="{{$t->id}}">{{$t->titulo}}
+                        </label>                        
+                        @endforeach
+                    </div>
                 </div>
             </form>
             </div>
@@ -244,9 +252,15 @@ $('#EditArtigoModal').on('shown.bs.modal',function(){
                     $('.descricao').val(response.artigo.descricao);
                     $('.conteudo').val(response.artigo.conteudo);
                     $('.slug').val(response.artigo.slug);   
-                }
+                    //Atribuindo aos checkboxs
+                    $("input[name='temas[]']").attr('checked',false); //desmarca todos
+                        //apenas os temas relacionados ao artigo
+                        $.each(response.temas,function(key,values){                                                        
+                                $("#check"+values.id).attr('checked',true);  //faz a marcação seletiva                         
+                        });
+                    }                
             }
-        });
+        });    
     });
     //Fim chamada EditArtigoModal
 //Inicio processo update
@@ -255,12 +269,18 @@ e.preventDefault();
 
             $(this).text("Atualizando...");
             var id = $('#edit_artigo_id').val();
+            //Array apenas com os checkboxs marcados 
+            var temas = new Array;
+                        $("input[name='temas[]']:checked").each(function(){                
+                            temas.push($(this).val());
+                        });                      
 
             var data = {
                 'titulo': $('#edit_titulo').val(),
                 'descricao': $('#edit_descricao').val(),
                 'conteudo': $('#edit_conteudo').val(),
-                'slug': $('#edit_slug').val(),                
+                'slug': $('#edit_slug').val(),    
+                'temas':temas,   //Array
             }
 
             $.ajaxSetup({
@@ -354,7 +374,7 @@ e.preventDefault();
             $("input[name='temas[]']:checked").each(function(){                
                 temas.push($(this).val());
             });              
-
+                        
             var data = {
                 'titulo': $('.titulo').val(),
                 'descricao': $('.descricao').val(),

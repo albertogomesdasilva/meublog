@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Artigo extends Model
 {
     use HasFactory;
+    public $timestamps = false;
     protected $table = 'artigos';
     protected $fillable = 
     [
@@ -16,6 +17,7 @@ class Artigo extends Model
         'conteudo',
         'slug',
         'user_id',
+        'imagem',
     ];
 
     public function user(){
@@ -24,6 +26,10 @@ class Artigo extends Model
 
     public function comentarios(){
         return $this->hasMany(Comentario::class);
+    }
+
+    public function temas(){
+        return $this->belongsToMany(Tema::class,'temas_artigos','artigos_id','temas_id');
     }
     
 }

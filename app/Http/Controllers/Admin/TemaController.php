@@ -133,6 +133,8 @@ class TemaController extends Controller
     public function destroy($id)
     {
         $tema = $this->tema->find($id);
+        $a = $tema->artigos;
+        $tema->artigos()->detach($a);
         $tema->delete();
         return response()->json([
             'status'  => 200,

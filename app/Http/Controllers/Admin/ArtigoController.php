@@ -94,7 +94,9 @@ class ArtigoController extends Controller
     public function edit($id)
     {
         $artigo = $this->artigo->find($id);
+        $temas = $artigo->temas; //Apenas os temas relacionados        
         return response()->json([
+            'temas'  => $temas,  //Envio do objeto no response
             'artigo' => $artigo,
             'status' => 200,
         ]);
@@ -129,9 +131,10 @@ class ArtigoController extends Controller
                 $artigo->descricao = $request->input('descricao');
                 $artigo->conteudo = $request->input('conteudo');
                 $artigo->slug = $request->input('slug');
-                $artigo->user_id = $user->id;
-                $artigo->update();
-                $a = Artigo::find($id);                
+                $artigo->user_id = $user->id;                
+                $artigo->update();       //atualização retorna um booleano  
+                $a = Artigo::find($id);   //localização do artigo atual pelo $id
+                $a->temas()->sync($request->input('temas')); //sync()temas do artigo
                 return response()->json([
                     'artigo'  => $a,
                     'user'    => $user,
@@ -152,7 +155,9 @@ class ArtigoController extends Controller
     public function destroy($id)
     {
         $artigo = $this->artigo->find($id);
-        $artigo->delete(); 
+        $t = $artigo->temas; //os dados de temas são atribuídos a variável $t
+        $artigo->temas()->detach($t); //exclui os dados de temas()
+        $artigo->delete(); //deleta o artigo
         return response()->json([
             'status'  => 200,
             'message' => 'Artigo excluído com sucesso!',
