@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Arquivo;
 use App\Models\Artigo;
 use App\Models\Tema;
 use Illuminate\Http\Request;
@@ -127,17 +128,23 @@ class ArtigoController extends Controller
             $artigo = $this->artigo->find($id);            
             $user = User::find(1);
             if($artigo){
-                $artigo->titulo = $request->input('titulo');
-                $artigo->descricao = $request->input('descricao');
-                $artigo->conteudo = $request->input('conteudo');
-                $artigo->slug = $request->input('slug');
-                $artigo->user_id = $user->id;                
-                $artigo->update();       //atualização retorna um booleano  
+                $data = [
+                    'titulo' => $request->input('titulo'),
+                    'descricao' => $request->input('descricao'),
+                    'conteudo' => $request->input('conteudo'),
+                    'slug' => $request->input('slug'),
+                    'user_id' => $user->id,                                                
+                    ];               
+                $artigo->update($data);       //atualização retorna um booleano  
                 $a = Artigo::find($id);   //localização do artigo atual pelo $id
                 $a->temas()->sync($request->input('temas')); //sync()temas do artigo
+                $arquivos = $a->arquivos;
+                $totalarqs = $a->arquivos->count();
                 return response()->json([
-                    'artigo'  => $a,
+                    'arquivos'=>$arquivos,
+                    'totalarqs'=>$totalarqs,
                     'user'    => $user,
+                    'artigo'  => $a,                    
                     'status'  => 200,
                     'message' => 'Artigo atualizado com sucesso!',
                 ]);
@@ -157,10 +164,143 @@ class ArtigoController extends Controller
         $artigo = $this->artigo->find($id);
         $t = $artigo->temas; //os dados de temas são atribuídos a variável $t
         $artigo->temas()->detach($t); //exclui os dados de temas()
+        if($artigo->imagem)
+        {
+            $this->deleteCapa($id); //exclui a capa e o arquivo
+        }
+        if($artigo->arquivos->count()>0) //se houver arquivo cadastrado
+        {
+            foreach($artigo->arquivos as $arqs) //arquivos relacionados
+            {
+                $this->deleteArquivo($arqs->id); //exclui o registro e o arquivo
+            }
+        } 
         $artigo->delete(); //deleta o artigo
         return response()->json([
             'status'  => 200,
             'message' => 'Artigo excluído com sucesso!',
         ]);
     }
+
+    public function editCapa($id){
+        $artigo = $this->artigo->find($id);
+        return response()->json([
+            'artigo' => $artigo,
+            'status' => 200,
+        ]);
+    }
+
+    public function uploadCapa(Request $request, $id){
+        //Salvar arquivo no diretório                 
+        $file = $request->file('imagem');                           
+        $fileName =  $id.'_'.$file->getClientOriginalName();
+        $filePath = 'img/'.$fileName;
+        $storagePath = public_path().'/storage/img/';
+        $file->move($storagePath,$fileName);   
+
+        //salvar informações no banco
+        $artigo = $this->artigo->find($id);
+        $data = [                          
+            'imagem' => $filePath,             
+        ];                        
+        $artigo->update($data);
+        $a = Artigo::find($id);
+        return response()->json([
+            'artigo' => $a,
+            'status' => 200,
+            'message' => 'A capa foi adicionada com sucesso!',
+        ]);
+   }
+
+   public function deleteCapa($id){
+    $artigo = $this->artigo->find($id);
+    $capaPath = public_path('/storage/'.$artigo->imagem);        
+    //deleta o arquivo na pasta   
+    if(file_exists($capaPath)){
+        unlink($capaPath);
+    }    
+    //limpa o campo imagem na tabela   
+    $data = [                          
+        'imagem' => null,             
+    ];                        
+    $artigo->update($data);  //atualização
+    $a = Artigo::find($id); //registro atualizado
+    return response()->json([
+        'artigo' => $a,
+        'status' => 200,
+        'message' => 'A capa foi excluída com sucesso!',
+    ]);
+}
+
+public function editArquivo($id){
+    $artigo = $this->artigo->find($id);
+    return response()->json([            
+        'artigo' => $artigo,
+        'status' => 200,
+    ]);
+}
+
+public function uploadArquivo(Request $request, $id){     
+    //seta o artigo e o usuário                     
+    $artigo = $this->artigo->find($id);
+    $user = User::find(1);                
+    //pega o array de arquivos          
+    if ($request->TotalFiles>0) 
+    {
+           for($x = 0; $x < $request->TotalFiles; $x++) 
+           {                                              
+              if($request->hasFile('arquivo'.$x))
+              {
+                    $file = $request->file('arquivo'.$x);
+                    $fileLabel = $file->getClientOriginalName();
+                    $fileName = $artigo->id.'_'.$fileLabel;                        
+                    $filePath = 'arq/'.$fileName;
+                    $storagePath = public_path().'/storage/arq/';
+                    $file->move($storagePath,$fileName);                                                 
+                    
+                    $data[$x]['artigos_id'] = $id;
+                    $data[$x]['user_id'] = $user->id; 
+                    $data[$x]['rotulo'] = $fileLabel;
+                    $data[$x]['nome'] = $fileName;
+                    $data[$x]['path'] = $filePath;
+                    $data[$x]['created_at'] = now();
+                    $data[$x]['updated_at'] = null;
+                } 
+           }                  
+             $arquivo = Arquivo::insert($data);                                                                  
+   }    
+             $artigoid = $artigo->id;
+             $totalarqs = $artigo->arquivos->count();
+             $arquivos = $artigo->arquivos;
+             return response()->json([
+                 'artigoid' => $artigoid,
+                 'totalarqs' => $totalarqs,
+                 'arquivos' => $arquivos,
+                 'status' => 200,
+                 'message' => 'O(s) arq(s) est(ão) adicionado(s) com sucesso!',
+             ]);  
+
+}
+
+public function deleteArquivo($id){        
+    $arquivo = Arquivo::find($id);
+    $artigoid = $arquivo->artigos_id;  
+    //deleção o arquivo na pasta /storage/arq/   
+    $arquivoPath = public_path('/storage/'.$arquivo->path);                    
+    if(file_exists($arquivoPath)){
+        unlink($arquivoPath);
+    }    
+    //excluir na tabela                             
+    $arquivo->delete();
+    $artigo = $this->artigo->find($artigoid);
+    $totalarqs = $artigo->arquivos->count();
+    return response()->json([
+        'artigoid' => $artigoid,
+        'totalarqs' => $totalarqs,
+        'status' => 200,
+        'message' => 'O arquivo foi excluído com sucesso!',
+    ]);        
+}
+
+
 }

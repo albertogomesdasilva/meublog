@@ -19,7 +19,14 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')->name('admin.')-
         Route::get('/edit/{id}','ArtigoController@edit')->name('edit');
         Route::put('/update/{id}','ArtigoController@update')->name('update');
         Route::delete('/delete/{id}','ArtigoController@destroy')->name('delete');
+        Route::get('/edit-capa/{id}','ArtigoController@editCapa');
+        Route::put('/upload-capa/{id}','ArtigoController@uploadCapa');
+        Route::post('/delete-capa/{id}','ArtigoController@deleteCapa');
+        Route::get('/edit-arquivo/{id}','ArtigoController@editArquivo');
+        Route::put('/upload-arquivo/{id}','ArtigoController@uploadArquivo');
+        Route::delete('/delete-arquivo/{id}','ArtigoController@deleteArquivo');            
     });  
+
     Route::prefix('tema')->name('tema.')->group(function(){
         Route::get('/index','TemaController@index')->name('index');
         Route::post('/store','TemaController@store');

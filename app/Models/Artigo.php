@@ -25,12 +25,16 @@ class Artigo extends Model
     }    
 
     public function comentarios(){
-        return $this->hasMany(Comentario::class);
+        return $this->hasMany(Comentario::class,'artigos_id');
     }
 
     public function temas(){
         return $this->belongsToMany(Tema::class,'temas_artigos','artigos_id','temas_id');
     }
+
+    public function arquivos(){
+        return $this->hasMany(Arquivo::class,'artigos_id');
+  }  
     
 }
 
