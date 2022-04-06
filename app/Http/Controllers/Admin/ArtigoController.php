@@ -66,7 +66,7 @@ class ArtigoController extends Controller
                 'titulo'     => $request->input('titulo'),
                 'descricao'  => $request->input('descricao'),
                 'conteudo'   => $request->input('conteudo'),
-                'slug'       => $request->input('slug'),
+                //'slug'       => $request->input('slug'),
                 'user_id'    => $user->id,
                 'created_at' =>now(),
                 'updated_at' => null,
@@ -132,7 +132,7 @@ class ArtigoController extends Controller
                     'titulo' => $request->input('titulo'),
                     'descricao' => $request->input('descricao'),
                     'conteudo' => $request->input('conteudo'),
-                    'slug' => $request->input('slug'),
+                    //'slug' => $request->input('slug'),
                     'user_id' => $user->id,                                                
                     ];               
                 $artigo->update($data);       //atualização retorna um booleano  

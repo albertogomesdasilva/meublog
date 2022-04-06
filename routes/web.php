@@ -35,5 +35,14 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')->name('admin.')-
         Route::delete('/delete/{id}','TemaController@destroy');
       }); 
     
-});
+}); //representa o fechamento do grupo admin
+
+
+Route::namespace('App\Http\Controllers\Page')->name('page.')->group(function(){
+    Route::get('/','HomeController@master')->name('master');
+    Route::get('/artigo/{slug}','HomeController@detail')->name('detail');
+    Route::get('/download-arquivo/{id}','HomeController@downloadArquivo')->name('download');
+    Route::get('/tema/{slug}','TemaArtigoController@index')->name('tema');
+  });
+  
 

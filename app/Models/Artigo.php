@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Artigo extends Model
 {
     use HasFactory;
+    use Sluggable;
     public $timestamps = false;
     protected $table = 'artigos';
     protected $fillable = 
@@ -35,7 +37,15 @@ class Artigo extends Model
     public function arquivos(){
         return $this->hasMany(Arquivo::class,'artigos_id');
   }  
-    
+
+  public function Sluggable():array{
+    return [
+            'slug' => [
+                'source' => 'titulo',
+            ],
+    ];
+
 }
 
-
+    
+}

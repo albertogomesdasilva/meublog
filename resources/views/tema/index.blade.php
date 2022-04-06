@@ -4,10 +4,10 @@
 <div class="modal fade" id="AddTemaModal" tabindex="-1" role="dialog" aria-labelledby="titleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="titleModalLabel" >Adicionar Tema</h5>
+           <div class="modal-header navbar navbar-dark bg-primary">
+                <h5 class="modal-title" id="titleModalLabel" style="color: white;">Adicionar Tema</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true" style="color: white;">&times;</span>
                 </button>
             </div>
             <div class="modal-body form-horizontal">
@@ -21,10 +21,10 @@
                         <label for="">Descrição</label>
                         <input type="text" class="descricao form-control">
                     </div>
-                    <div class="form-group mb-3">
+                    <!--<div class="form-group mb-3">
                         <label for="">Slug</label>
                         <input type="text" class="slug form-control">
-                    </div>
+                    </div> -->
                 </form>
             </div>
             <div class="modal-footer">
@@ -39,10 +39,10 @@
 <div class="modal fade" id="EditTemaModal" tabindex="-1" role="dialog" aria-labelledby="titleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="titleModalLabel">Editar e atualizar Tema</h5>
+            <div class="modal-header navbar navbar-dark bg-primary">
+                <h5 class="modal-title" id="titleModalLabel" style="color: white;">Editar e atualizar Tema</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true" style="color: white;">&times;</span>
                 </button>
             </div>
             <div class="modal-body form-horizontal">
@@ -57,10 +57,10 @@
                         <label for="">Descrição</label>
                         <input type="text" id="edit_descricao" class="descricao form-control">
                     </div>
-                    <div class="form-group mb-3">
+                    <!--<div class="form-group mb-3">
                         <label for="">Slug</label>
                         <input type="text" id="edit_slug" class="slug form-control">
-                    </div>
+                    </div> -->
                 </form>
             </div>
             <div class="modal-footer">
@@ -201,7 +201,7 @@ $('#EditTemaModal').on('shown.bs.modal',function(){
                     $('#edit_tema_id').val(response.tema.id);
                     $('.titulo').val(response.tema.titulo);
                     $('.descricao').val(response.tema.descricao);
-                    $('.slug').val(response.tema.slug);
+                    //$('.slug').val(response.tema.slug);
                 }
             }
         });
@@ -215,7 +215,7 @@ $('#EditTemaModal').on('shown.bs.modal',function(){
         var data = {
             'titulo':$('#edit_titulo').val(),
             'descricao':$('#edit_descricao').val(),
-            'slug':$('#edit_slug').val(),
+            //'slug':$('#edit_slug').val(),
         }
         $.ajaxSetup({
             headers:{
@@ -297,7 +297,7 @@ $('#EditTemaModal').on('shown.bs.modal',function(){
         var data = {
             'titulo':$('.titulo').val(),
             'descricao':$('.descricao').val(),
-            'slug':$('.slug').val(),
+            //'slug':$('.slug').val(),
         }
         $.ajaxSetup({
             headers:{

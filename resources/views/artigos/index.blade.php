@@ -7,10 +7,10 @@
 <div class="modal fade" id="AddArtigoModal" tabindex="-1" role="dialog" aria-labelledby="titleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="titleModalLabel">Adicionar Artigo</h5>
+        <div class="modal-header navbar navbar-dark bg-primary">
+                <h5 class="modal-title" id="titleModalLabel" style="color: white;">Adicionar Artigo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true" style="color: white;">&times;</span>
                 </button>                
             </div>
             <div class="modal-body form-horizontal">
@@ -28,10 +28,10 @@
                     <label for="">Conteúdo</label>
                     <textarea class="conteudo form-control" cols="30" rows="10"></textarea>
                 </div>                
-                <div class="form-group mb-3">
+                <!--<div class="form-group mb-3">
                     <label for="">Slug</label>
                     <input type="text" class="slug form-control">
-                </div> 
+                </div> -->
                 <div class="form-group mb-3">
                 <label for="">Temas</label>
                 <div class="form-group mb-3">
@@ -57,10 +57,10 @@
 <div class="modal fade" id="EditArtigoModal" tabindex="-1" role="dialog" aria-labelledby="titleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="titleModalLabel">Editar e atualizar Artigo</h5>
+           <div class="modal-header navbar navbar-dark bg-primary">
+                <h5 class="modal-title" id="titleModalLabel" style="color: white;">Editar e atualizar Artigo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true" style="color: white;">&times;</span>
                 </button>                
             </div>
             <div class="modal-body form-horizontal">
@@ -79,10 +79,10 @@
                     <label for="">Conteúdo</label>
                     <textarea id="edit_conteudo" class="conteudo form-control" cols="30" rows="10"></textarea>
                 </div>                
-                <div class="form-group mb-3">
+                <!--<div class="form-group mb-3">
                     <label for="">Slug</label>
                     <input type="text" id="edit_slug" class="slug form-control">
-                </div>
+                </div> -->
                 <div class="form-group mb-3">
                     <label for="">Temas</label>
                     <div class="form-group mb-3">
@@ -109,10 +109,10 @@
 <div class="modal fade" id="EnviarCapaModal" tabindex="-1" role="dialog" aria-labelledby="titleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header navbar navbar-light bg-light">
-                <h5 class="modal-title" id="titleModalLabel">Enviar Capa do Artigo</h5>
+            <div class="modal-header navbar navbar-dark bg-primary">
+                <h5 class="modal-title" id="titleModalLabel" style="color: white;">Enviar Capa do Artigo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true" style="color: white;">&times;</span>
                 </button>                
             </div>
             <div class="modal-body form-horizontal">
@@ -140,10 +140,10 @@
 <div class="modal fade" id="EnviarPDFModal" tabindex="-1" role="dialog" aria-labelledby="titleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header navbar navbar-light bg-light">
-                <h5 class="modal-title" id="titleModalLabel">Enviar PDFs do Artigo</h5>
+           <div class="modal-header navbar navbar-dark bg-primary">
+                <h5 class="modal-title" id="titleModalLabel" style="color: white;">Enviar PDFs do Artigo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true" style="color: white;">&times;</span>
                 </button>                
             </div>
             <div class="modal-body form-horizontal">                  
@@ -329,7 +329,7 @@ $('#EditArtigoModal').on('shown.bs.modal',function(){
                     $('.titulo').val(response.artigo.titulo);
                     $('.descricao').val(response.artigo.descricao);
                     $('.conteudo').val(response.artigo.conteudo);
-                    $('.slug').val(response.artigo.slug);   
+                    //$('.slug').val(response.artigo.slug);   
                     //Atribuindo aos checkboxs
                     $("input[name='temas[]']").attr('checked',false); //desmarca todos
                         //apenas os temas relacionados ao artigo
@@ -357,7 +357,7 @@ e.preventDefault();
                 'titulo': $('#edit_titulo').val(),
                 'descricao': $('#edit_descricao').val(),
                 'conteudo': $('#edit_conteudo').val(),
-                'slug': $('#edit_slug').val(),    
+                //'slug': $('#edit_slug').val(),    
                 'temas':temas,   //Array
             }
 
@@ -487,7 +487,7 @@ e.preventDefault();
                 'titulo': $('.titulo').val(),
                 'descricao': $('.descricao').val(),
                 'conteudo': $('.conteudo').val(),
-                'slug': $('.slug').val(),
+                //'slug': $('.slug').val(),
                 'temas':temas,   //Array
             }
             $.ajaxSetup({                

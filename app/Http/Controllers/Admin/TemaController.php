@@ -56,7 +56,7 @@ class TemaController extends Controller
             $data = [
                 'titulo'    => $request->input('titulo'),
                 'descricao' => $request->input('descricao'),
-                'slug'      => $request->input('slug'),
+                //'slug'      => $request->input('slug'),
                 'created_at'=> now(),      //atribuição explícita da data atual
                 'updated_at'=> null,        //anulação explícita
             ];
@@ -110,7 +110,7 @@ class TemaController extends Controller
                 $data = [
                     'titulo'    => $request->input('titulo'),
                     'descricao' => $request->input('descricao'),
-                    'slug'      => $request->input('slug'),
+                    //'slug'      => $request->input('slug'),
                 ];
                 $tema->update($data);
                 $t = $this->tema->find($id);
