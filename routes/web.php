@@ -1,15 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
+Auth::routes();
 
-//Route::get('hello-world', 'App\Http\Controllers\HelloWorldController@index');
+Route::get('/home', [App\Http\Controllers\Page\HomeController::class, 'master'])->name('home');
 
-//Route::resource('/users', 'App\Http\Controllers\UserController');
+Route::group(['middleware' => ['auth']],function(){
 
 Route::prefix('admin')->namespace('App\Http\Controllers\Admin')->name('admin.')->group(function(){
     Route::prefix('artigos')->name('artigos.')->group(function(){
@@ -34,8 +33,20 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')->name('admin.')-
         Route::put('/update/{id}','TemaController@update');
         Route::delete('/delete/{id}','TemaController@destroy');
       }); 
+
+    Route::prefix('user')->name('user.')->group(function(){
+        Route::get('/index','UserController@index')->name('index');
+        Route::put('/store','UserController@store');
+        Route::get('/edit/{id}','UserController@edit');
+        Route::put('/update/{id}','UserController@update');
+        Route::delete('/delete/{id}','UserController@destroy');
+        Route::post('/moderador/{id}', 'UserController@moderadorUsuario');
+        Route::post('/inativo/{id}', 'UserController@inativoUsuario');
+      });    
     
-}); //representa o fechamento do grupo admin
+    }); //fim do group admin
+
+  }); //fim do escopo do middleware auth  
 
 
 Route::namespace('App\Http\Controllers\Page')->name('page.')->group(function(){
@@ -43,6 +54,11 @@ Route::namespace('App\Http\Controllers\Page')->name('page.')->group(function(){
     Route::get('/artigo/{slug}','HomeController@detail')->name('detail');
     Route::get('/download-arquivo/{id}','HomeController@downloadArquivo')->name('download');
     Route::get('/tema/{slug}','TemaArtigoController@index')->name('tema');
+    Route::get('/show-perfil/{id}','HomeController@showPerfil')->name('showperfil');
+    Route::put('/perfil/{id}','HomeController@perfilUsuario')->name('perfil');  
+    Route::post('/salvar-comentario','ComentarioController@salvarComentario');
+    Route::delete('/delete-comentario/{id}','ComentarioController@deleteComentario');
   });
-  
+
+
 

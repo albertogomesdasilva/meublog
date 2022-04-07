@@ -59,7 +59,7 @@ class ArtigoController extends Controller
                 'errors' => $validator->errors()->getMessages(),
             ]);
         }else{
-            $user = User::find(1);
+            $user = auth()->user();
             $timestamps = $this->artigo->timestamps;
             $this->artigo->timestamps=false;
             $data = [
@@ -126,7 +126,7 @@ class ArtigoController extends Controller
             ]);
         }else{
             $artigo = $this->artigo->find($id);            
-            $user = User::find(1);
+            $user = auth()->user();
             if($artigo){
                 $data = [
                     'titulo' => $request->input('titulo'),
@@ -175,6 +175,11 @@ class ArtigoController extends Controller
                 $this->deleteArquivo($arqs->id); //exclui o registro e o arquivo
             }
         } 
+        if($artigo->comentarios->count()>0) //Se houver comentário
+        {
+                $comentarios = $artigo->comentarios;         
+                $artigo->comentarios()->delete($comentarios);            
+        }      
         $artigo->delete(); //deleta o artigo
         return response()->json([
             'status'  => 200,
@@ -243,7 +248,7 @@ public function editArquivo($id){
 public function uploadArquivo(Request $request, $id){     
     //seta o artigo e o usuário                     
     $artigo = $this->artigo->find($id);
-    $user = User::find(1);                
+    $user = auth()->user();
     //pega o array de arquivos          
     if ($request->TotalFiles>0) 
     {

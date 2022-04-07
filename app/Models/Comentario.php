@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Comentario extends Model
 {
     use HasFactory;
+    public $timestamps = false;
     protected $table = 'comentarios';
     protected $fillable = [
         'artigos_id',
@@ -20,7 +21,7 @@ class Comentario extends Model
     }
 
     public function artigo(){
-        return $this->belongsTo(Artigo::class);
+        return $this->belongsTo(Artigo::class,'artigos_id');
     }
     
 }

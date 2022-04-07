@@ -22,9 +22,11 @@ class User extends Authenticatable
         'email',
         'password',
         'moderador',
+        'inativo',
         'avatar',
         'link_instagram',
         'link_facebook',
+        'link_site',
     ];
 
     public function artigos(){
