@@ -60,13 +60,11 @@
                 <!--chamada dos comentários--> 
                 @auth   
                 <div class="col-14">             
-                <button type="button" class="btn btn-primary FormCommentModal_btn" data-id="{{$artigo->id}}"><i class="fas fa-heart"></i> Comentar</button>                   
+                <button type="button" class="btn btn-primary FormCommentModal_btn" data-id="{{$artigo->id}}"><i class="fas fa-heart"></i> Comentar</button>
                 </div>
                 @else <!--se não estiver logado-->
                 <strong>Faça Login para comentar! <i class="fas fa-comments"></i></strong>
-                @endauth  
-                <!--se houver comentários da publicação-->                     
-                @if($comentarios->count())                         
+                @endauth                                                             
                 <div class="col-14">
                 <hr class="my-4" /> 
                 <h3>Comentários</h3>
@@ -106,8 +104,7 @@
                 <div class="d-flex justify-content-center mb-4">
                 {{$comentarios->links("pagination::bootstrap-4")}}                
                 </div>
-                </div>   
-                @endif
+                </div>                   
                 <!--fim dos comentários -->
               </div>
               </div>                
@@ -239,7 +236,8 @@ var limitaComentario1 = "";
 var limitacomentario2 = "";                        
 var limitacomentario3 = "";                        
 var linhaComentario = "";
-var datacriacao = new Date(response.comentario.created_at).toLocaleString("pt-BR");
+var datacriacao = new Date(response.comentario.created_at);    
+    datacriacao = datacriacao.toLocaleString("pt-BR");
       if(datacriacao=="31/12/1969 21:00:00"){
             datacriacao="";
       }
@@ -273,9 +271,9 @@ var datacriacao = new Date(response.comentario.created_at).toLocaleString("pt-BR
                 }	
             });
         });
-        //Fim Adicionar comentário
-        //Inicio excluir comentário	
-        $(document).on('click','.delete_comentario_btn',function(e){
+//Fim Adicionar comentário
+//Inicio excluir comentário	
+    $(document).on('click','.delete_comentario_btn',function(e){
             e.preventDefault();
             var id = $(this).data("id");
             $.ajaxSetup({
