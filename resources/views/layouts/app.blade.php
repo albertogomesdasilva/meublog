@@ -28,7 +28,7 @@
                    <span class="caret"></span>
                 @endauth
 
-                <a class="navbar-brand" href="{{route('page.master')}}">meu Blog</a>
+                <a class="navbar-brand" href="{{route('page.master')}}">meu Blog - TURÍSTICO</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDropdown" aria-controls="navbarDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
                 </button> 

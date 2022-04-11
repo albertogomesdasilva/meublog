@@ -7,8 +7,8 @@
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         <div class="site-heading">
-                            <h1>Laravel & AJAX</h1>
-                            <span class="subheading">Aprenda Fazendo</span>
+                            <h1>Estado do Amapá/BRASIL</h1>
+                            <span class="subheading">Turismo, mitos e lendas</span>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,9 @@
                         </a>
                         <p class="post-meta">
                             Postado por
+                            @if($artigo->user)
                             <a href="#!">{{$artigo->user->name}}</a>                            
+                            @endif
                             {{ucwords(strftime('%A, %d de %B de %Y', strtotime($artigo->created_at)))}}
                             <a href="{{route('page.detail',['slug' => $artigo->slug])}}">
                                 <i class="fas fa-comment-alt"></i> {{$artigo->comentarios()->count()}}
