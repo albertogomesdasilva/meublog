@@ -37,8 +37,8 @@ class TemaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'titulo'     => 'required|max:20',
-            'descricao'  => 'required|max:100', 
+            'titulo'     => 'required|max:100',
+            'descricao'  => 'required|max:180', 
         ],[
             'titulo.required'  => 'O campo TÍTULO é obrigatório',
             'titulo.max'       => 'O TÍTULO não pode ter mais de :max caracteres!',

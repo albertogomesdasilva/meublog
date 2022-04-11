@@ -58,6 +58,7 @@ Route::namespace('App\Http\Controllers\Page')->name('page.')->group(function(){
     Route::put('/perfil/{id}','HomeController@perfilUsuario')->name('perfil');  
     Route::post('/salvar-comentario','ComentarioController@salvarComentario');
     Route::delete('/delete-comentario/{id}','ComentarioController@deleteComentario');
+    Route::get('/enviar-email/{slug}','HomeController@enviarEmail');
   });
 
 

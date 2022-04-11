@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Page;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendMailUser;
 use App\Models\Arquivo;
 use App\Models\Artigo;
 use App\Models\Comentario;
@@ -10,6 +11,7 @@ use App\Models\Tema;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -130,5 +132,34 @@ class HomeController extends Controller
     }
     
     }
+
+    public function enviarEmail(Request $request, $slug){
+        $notificar = $request->input('notificar');        
+        //Atualizando o campo notificarassinante
+        $artigo = $this->artigo->whereSlug($slug)->first();
+        $data = [
+            'notificarassinantes'  => $notificar,
+        ];
+        $artigo->update($data);
+        if($notificar==1){
+        //Montando a lista de emails
+        $contatos = User::all('email');        
+        $emails = [];
+        $i=0;
+        foreach($contatos as $contato){
+            $emails[$i] = $contato->email;
+            $i++;
+        }
+        Mail::to($emails)->send(new SendMailUser($artigo));
+        }
+        return response()->json([
+            'status' => 200,
+            'id' => $artigo->id,
+            'slug' => $slug,
+            'notificar' => $notificar,
+        ]);
+    }
+
+
     
 }
