@@ -437,11 +437,11 @@ e.preventDefault();
                                 <td><div class="btn-group">\
                                 <button type="button" data-id="'+response.artigo.id+'" \
                                 class="edit_artigo_btn fas fa-edit" \
-                                style="background:transparent;border:none"></button>\
+                                style="background:transparent;border:none;"></button>\
                                 <button type="button" data-id="'+response.artigo.id+'" \
                             data-tituloartigo="'+response.artigo.titulo+'" \
                             class="delete_artigo_btn fas fa-trash" \
-                            style="background:transparent;border:none"></button>\
+                            style="background:transparent;border:none;"></button>\
                             </div></td>\
                             </tr>';                                             
                         var linha = limita1+limita2+limita3+limita4+limita5;            
@@ -546,11 +546,11 @@ e.preventDefault();
                     <td><div class="btn-group">\
                     <button type="button" data-id="'+response.artigo.id+'" \
                     class="edit_artigo_btn fas fa-edit" \
-                    style="background:transparent;border:none"></button>\
+                    style="background:transparent;border:none;"></button>\
                     <button type="button" data-id="'+response.artigo.id+'" \
                     data-tituloartigo="'+response.artigo.titulo+'" \
                     class="delete_artigo_btn fas fa-trash" \
-                    style="background:transparent;border:none"></button>\
+                    style="background:transparent;border:none;"></button>\
                     </div></td>\
                     </tr>';              
                 var linha = limita1+limita2+limita3+limita4;
