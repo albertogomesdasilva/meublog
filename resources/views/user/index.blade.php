@@ -340,7 +340,8 @@ $('#EditUserModal').on('shown.bs.modal',function(){
                     $('#editform').trigger('reset');
                     $('#EditUserModal').modal('hide');
                     //montando a <tr> identificada na tabela html                    
-                    var dataatualizacao = new Date(response.user.updated_at).toLocaleString("pt-BR");
+                    var dataatualizacao = new Date(response.user.updated_at);
+                        dataatualizacao = dataatualizacao.toLocaleString("pt-BR");
                     if(dataatualizacao=="31/12/1969 21:00:00"){
                         dataatualizacao="";
                     }
@@ -391,7 +392,7 @@ $('#EditUserModal').on('shown.bs.modal',function(){
                                 <button type="button" data-id="'+response.user.id+'"\
                                  data-nomeusuario="'+response.user.name+'" \
                                  class="delete_user_btn fas fa-trash" \
-                                 style="background:transparent;border:none"></button>\
+                                 style="background:transparent;border:none;"></button>\
                                 </div></td>\
                                 </tr>';                                             
                     var linha = limita1+limita2+limita3+limita4+limita5+limita6;            
@@ -456,7 +457,8 @@ $('#EditUserModal').on('shown.bs.modal',function(){
                     $('#addform').trigger('reset');
                     $('#AddUserModal').modal('hide');
                      //montando a <tr> identificada na tabela html                    
-                     var dataatualizacao = new Date(response.user.updated_at).toLocaleString("pt-BR");
+                     var dataatualizacao = new Date(response.user.updated_at);
+                         dataatualizacao = dataatualizacao.toLocaleString("pt-BR");
                     if(dataatualizacao=="31/12/1969 21:00:00"){
                         dataatualizacao="";
                     }
@@ -507,7 +509,7 @@ $('#EditUserModal').on('shown.bs.modal',function(){
                                 <button type="button" data-id="'+response.user.id+'" \
                                 data-nomeusuario="'+response.user.name+'" \
                                 class="delete_user_btn fas fa-trash" \
-                                style="background:transparent;border:none"></button>\
+                                style="background:transparent;border:none;"></button>\
                                 </div></td>\
                                 </tr>';                                             
                     var linha = limita1+limita2+limita3+limita4+limita5+limita6;
